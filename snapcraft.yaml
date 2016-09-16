@@ -1,0 +1,54 @@
+name: apt
+version: "1.3"
+summary: Commandline package manager
+description: This package provides commandline tools for searching and managing as well
+ as querying information about packages as a low-level access to all
+ features of the libapt-pkg library.
+ .
+ These include
+  * apt-get for retrieval of packages and information about them
+    from authenticated sources and for installation, upgrade and
+    removal of packages together with their dependencies
+  * apt-cache for querying available information about installed
+    as well as installable packages
+  * apt-cdrom to use removable media as a source for packages
+  * apt-config as an interface to the configuration settings
+  * apt-key as an interface to manage authentication keys
+confinement: strict
+
+apps:
+  apt:
+    command: apt
+  apt-cache:
+    command: apt-cache
+  apt-cdrom:
+    command: apt-cdrom
+    plugs: [optical-drive]
+  apt-config:
+    command: apt-config
+  apt-get:
+    command: apt-get
+    plugs: [network]
+  apt-key:
+    command: apt-key
+    plugs: [network]
+  apt-mark:
+    command: apt-mark
+
+parts:
+  apt-src:
+    plugin: cmake
+    source: lp:apt
+    build-packages: [docbook-xml, docbook-xsl, gettext, libbz2-dev,
+                     libcurl4-gnutls-dev, libdb-dev, libgtest-dev, liblz4-dev,
+                     liblzma-dev, po4a, xsltproc, zlib1g-dev, doxygen,
+                     graphviz, w3m]
+  confdirs:
+    plugin: dump 
+    source: .
+    filesets:
+        ../../../apt.conf.d: etc/apt/apt.conf.d
+        ../../../preferences.d: etc/apt/preferences.d
+        ../../../sources.list.d: etc/apt/sources.list.d
+        ../../../trusted.gpg.d: etc/apt/trusted.gpg.d
+
